@@ -7,10 +7,21 @@ import (
 	"strings"
 )
 
+type config struct {
+	Next     string
+	Previous string
+}
+
+var state = &config{
+	Next:     "",
+	Previous: "",
+}
+
 type cliCommand struct {
 	name        string
 	description string
 	callback    func() error
+	config      *config
 }
 
 func startRepl() {
@@ -27,7 +38,7 @@ func startRepl() {
 		}
 		err := command.callback()
 		if err != nil {
-			fmt.Println("Something went really wrong: $w", err)
+			fmt.Println("Something went really wrong: ", err)
 		}
 	}
 }
@@ -48,6 +59,18 @@ func getValidCommands() map[string]cliCommand {
 			name:        "help",
 			description: "Display a help message",
 			callback:    commandHelp,
+		},
+		"map": {
+			name:        "map",
+			description: "Display location areas",
+			callback:    commandMap,
+			config:      state,
+		},
+		"mapb": {
+			name:        "mapb",
+			description: "Display previous location areas",
+			callback:    commandMapb,
+			config:      state,
 		},
 	}
 }
