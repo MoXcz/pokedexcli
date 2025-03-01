@@ -6,13 +6,18 @@ import (
 	"net/http"
 )
 
-func getLocationAreas(url *string) (RespLocations, error) {
+func (c *Client) getLocationAreas(url *string) (RespLocations, error) {
 	fullURL := baseURL + "/location-area"
 	if url != nil {
 		fullURL = *url // in case there's some previous state
 	}
 
-	res, err := http.Get(fullURL)
+	req, err := http.NewRequest("GET", fullURL, nil)
+	if err != nil {
+		return RespLocations{}, err
+	}
+
+	res, err := c.httpClient.Do(req)
 	if err != nil {
 		return RespLocations{}, fmt.Errorf("Error communicating with the server: %w", err)
 	}
@@ -22,12 +27,11 @@ func getLocationAreas(url *string) (RespLocations, error) {
 		return RespLocations{}, fmt.Errorf("Response failed with status code: %d and\nbody: %s\n", res.StatusCode, res.Body)
 	}
 
-	var areas RespLocations
-
+	var locationAreas RespLocations
 	decoder := json.NewDecoder(res.Body)
-	err = decoder.Decode(&areas)
+	err = decoder.Decode(&locationAreas)
 	if err != nil {
 		return RespLocations{}, fmt.Errorf("Error decoding JSON: %w", err)
 	}
-	return areas, nil
+	return locationAreas, nil
 }
