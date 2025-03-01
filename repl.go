@@ -3,28 +3,24 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"github.com/MoXcz/pokedexcli/internal/pokeapi"
 	"os"
 	"strings"
 )
 
 type config struct {
-	Next     string
-	Previous string
-}
-
-var state = &config{
-	Next:     "",
-	Previous: "",
+	pokeapiClient pokeapi.Client
+	nextURL       *string
+	previousURL   *string
 }
 
 type cliCommand struct {
 	name        string
 	description string
-	callback    func() error
-	config      *config
+	callback    func(*config) error
 }
 
-func startRepl() {
+func startRepl(cfg *config) {
 	scanner := bufio.NewScanner(os.Stdin)
 	for {
 		fmt.Print("Pokedex > ")
@@ -36,7 +32,7 @@ func startRepl() {
 			fmt.Println("Unknown command")
 			continue
 		}
-		err := command.callback()
+		err := command.callback(cfg)
 		if err != nil {
 			fmt.Println("Something went really wrong: ", err)
 		}
@@ -64,13 +60,11 @@ func getValidCommands() map[string]cliCommand {
 			name:        "map",
 			description: "Display location areas",
 			callback:    commandMap,
-			config:      state,
 		},
 		"mapb": {
 			name:        "mapb",
 			description: "Display previous location areas",
 			callback:    commandMapb,
-			config:      state,
 		},
 	}
 }
