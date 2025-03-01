@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/bootdotdev/pokedexcli/internal/pokeapi"
+	"github.com/MoXcz/pokedexcli/internal/pokeapi"
 	"time"
 )
 
