@@ -11,17 +11,15 @@ type cacheEntry struct {
 }
 
 type Cache struct {
-	entries  map[string]cacheEntry
-	mu       *sync.Mutex
-	interval time.Duration
+	entries map[string]cacheEntry
+	mu      *sync.Mutex
 }
 
 func NewCache(interval time.Duration) *Cache {
 	c := &Cache{
-		entries:  make(map[string]cacheEntry),
-		interval: interval,
-		mu:       &sync.Mutex{},
+		entries: make(map[string]cacheEntry),
+		mu:      &sync.Mutex{},
 	}
-	go c.reapLoop()
+	go c.reapLoop(interval)
 	return c
 }

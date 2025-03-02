@@ -2,8 +2,8 @@ package pokecache
 
 import "time"
 
-func (c *Cache) reapLoop() {
-	ticker := time.NewTicker(c.interval)
+func (c *Cache) reapLoop(interval time.Duration) {
+	ticker := time.NewTicker(interval)
 
 	for {
 		<-ticker.C
@@ -14,7 +14,7 @@ func (c *Cache) reapLoop() {
 		// for each tick
 		for key, entry := range c.entries {
 			age := now.Sub(entry.createdAt)
-			if age > c.interval {
+			if age > interval {
 				delete(c.entries, key)
 			}
 		}
