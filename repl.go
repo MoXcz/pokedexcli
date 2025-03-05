@@ -17,7 +17,7 @@ type config struct {
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(*config) error
+	callback    func(cfg *config, args *string) error
 }
 
 func startRepl(cfg *config) {
@@ -25,14 +25,20 @@ func startRepl(cfg *config) {
 	for {
 		fmt.Print("Pokedex > ")
 		scanner.Scan()
-		input := scanner.Text()
-		commandName := cleanInput(input)[0]
-		command, ok := getValidCommands()[commandName]
+
+		cmd := cleanInput(scanner.Text())
+		cmdName := cmd[0]
+		cmdArg := ""
+		if len(cmd) > 1 {
+			cmdArg = cmd[1]
+		}
+
+		validCommand, ok := getValidCommands()[cmdName]
 		if !ok {
 			fmt.Println("Unknown command")
 			continue
 		}
-		err := command.callback(cfg)
+		err := validCommand.callback(cfg, &cmdArg)
 		if err != nil {
 			fmt.Println("Something went really wrong: ", err)
 		}
