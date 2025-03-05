@@ -17,7 +17,7 @@ type config struct {
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(cfg *config, args *string) error
+	callback    func(*config, ...string) error
 }
 
 func startRepl(cfg *config) {
@@ -27,10 +27,14 @@ func startRepl(cfg *config) {
 		scanner.Scan()
 
 		cmd := cleanInput(scanner.Text())
+		if len(cmd) < 0 {
+			continue
+		}
+
 		cmdName := cmd[0]
-		cmdArg := ""
+		cmdArgs := []string{}
 		if len(cmd) > 1 {
-			cmdArg = cmd[1]
+			cmdArgs = cmd[1:]
 		}
 
 		validCommand, ok := getValidCommands()[cmdName]
@@ -38,9 +42,9 @@ func startRepl(cfg *config) {
 			fmt.Println("Unknown command")
 			continue
 		}
-		err := validCommand.callback(cfg, &cmdArg)
+		err := validCommand.callback(cfg, cmdArgs...)
 		if err != nil {
-			fmt.Println("Something went really wrong: ", err)
+			fmt.Println(err)
 		}
 	}
 }
@@ -71,6 +75,11 @@ func getValidCommands() map[string]cliCommand {
 			name:        "mapb",
 			description: "Display previous location areas",
 			callback:    commandMapb,
+		},
+		"explore": {
+			name:        "explore",
+			description: "Display area location provided by argument",
+			callback:    commandExplore,
 		},
 	}
 }
