@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func (c *Client) GetPokemon(area string) (RespPokemon, error) {
+func (c *Client) GetLocation(area string) (RespLocation, error) {
 	fullURL := baseURL + "/location-area/" + area
 
 	body, ok := c.cache.Get(fullURL)
@@ -15,32 +15,32 @@ func (c *Client) GetPokemon(area string) (RespPokemon, error) {
 	if !ok {
 		req, err := http.NewRequest("GET", fullURL, nil)
 		if err != nil {
-			return RespPokemon{}, err
+			return RespLocation{}, err
 		}
 
 		res, err := c.httpClient.Do(req)
 		if err != nil {
-			return RespPokemon{}, fmt.Errorf("Error communicating with the server: %w", err)
+			return RespLocation{}, fmt.Errorf("Error communicating with the server: %w", err)
 		}
 		defer res.Body.Close()
 
 		if res.StatusCode > 299 {
-			return RespPokemon{}, fmt.Errorf("Response failed with status code: %d and\nbody: %s\n", res.StatusCode, res.Body)
+			return RespLocation{}, fmt.Errorf("Response failed with status code: %d and\nbody: %s\n", res.StatusCode, res.Body)
 		}
 
 		body, err = io.ReadAll(res.Body)
 		if err != nil {
-			return RespPokemon{}, fmt.Errorf("Error reading body: %w", err)
+			return RespLocation{}, fmt.Errorf("Error reading body: %w", err)
 		}
 
 		c.cache.Add(fullURL, body)
 	}
 
-	var pokemon RespPokemon
+	var pokemon RespLocation
 
 	err := json.Unmarshal(body, &pokemon)
 	if err != nil {
-		return RespPokemon{}, fmt.Errorf("Error decoding JSON %w", err)
+		return RespLocation{}, fmt.Errorf("Error decoding JSON %w", err)
 	}
 
 	return pokemon, nil
