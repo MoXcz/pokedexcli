@@ -27,7 +27,7 @@ func startRepl(cfg *config) {
 		scanner.Scan()
 
 		cmd := cleanInput(scanner.Text())
-		if len(cmd) < 0 {
+		if len(cmd) <= 0 {
 			continue
 		}
 
