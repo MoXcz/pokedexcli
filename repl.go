@@ -9,10 +9,11 @@ import (
 )
 
 type config struct {
-	pokeapiClient pokeapi.Client
-	nextURL       *string
-	previousURL   *string
-	caughtPokemon map[string]pokeapi.Pokemon
+	pokeapiClient   pokeapi.Client
+	nextURL         *string
+	previousURL     *string
+	caughtPokemon   map[string]pokeapi.Pokemon
+	historyCommands map[string]string
 }
 
 type cliCommand struct {
@@ -22,6 +23,7 @@ type cliCommand struct {
 }
 
 func startRepl(cfg *config) {
+	cfg.historyCommands = make(map[string]string)
 	scanner := bufio.NewScanner(os.Stdin)
 	for {
 		fmt.Print("Pokedex > ")
@@ -47,6 +49,8 @@ func startRepl(cfg *config) {
 		if err != nil {
 			fmt.Println(err)
 		}
+		commandIndex := fmt.Sprintf("%d", len(cfg.historyCommands))
+		cfg.historyCommands[commandIndex] = cmdName
 	}
 }
 
@@ -96,6 +100,11 @@ func getValidCommands() map[string]cliCommand {
 			name:        "pokedex",
 			description: "Print all caught pokemon",
 			callback:    commandPokedex,
+		},
+		"history": {
+			name:        "history",
+			description: "Print previously used commands",
+			callback:    commandHistory,
 		},
 	}
 }
