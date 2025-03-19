@@ -8,7 +8,7 @@ There are a lot of ways to use APIs and to look for Pokémon, so `pokedexcli` us
 
 ## Quick Start
 
-Install `pokedexcli` using the Go toolchain (information on how to install it [here](https://go.dev/doc/install):
+Install `pokedexcli` using the Go toolchain (information on how to install it [here](https://go.dev/doc/install)):
 
 ```sh
 go install github.com/MoXcz/pokedexcli@latest
@@ -57,7 +57,7 @@ Types:
   - flying
 ```
 
-## Contributing
+## Build
 
 ### Clone the repo:
 
