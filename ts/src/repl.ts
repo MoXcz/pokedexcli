@@ -1,34 +1,26 @@
-import { createInterface } from "node:readline";
-import { getCommands } from "./command.js";
+import { State } from "./state.js";
 
-const rl = createInterface({
-  input: process.stdin,
-  output: process.stdout,
-  prompt: "> ",
-});
-
-export function startREPL() {
-  rl.prompt();
-  rl.on("line", (input) => {
+export function startREPL(state: State) {
+  state.rl.prompt();
+  state.rl.on("line", (input) => {
     if (input == "") {
-      rl.prompt();
+      state.rl.prompt();
       return;
     }
     const cleanedInput = cleanInput(input);
     const command = cleanedInput[0];
     // const args = cleanedInput.slice(1)
 
-    const commands = getCommands();
-    if (command in commands) {
+    if (command in state.commands) {
       try {
-        commands[command].callback(commands);
+        state.commands[command].callback(state);
       } catch (err) {
         console.error(err);
       }
     } else {
       console.log("Unknown command");
     }
-    rl.prompt();
+    state.rl.prompt();
   });
 }
 
