@@ -5,7 +5,7 @@ import { commandHelp } from "./command_help.js";
 export type CLICommand = {
   name: string;
   description: string;
-  callback: (state: State) => void;
+  callback: (state: State) => Promise<void>;
 };
 
 export type State = {
@@ -13,7 +13,7 @@ export type State = {
   commands: Record<string, CLICommand>;
 };
 
-export function initState(): State {
+export async function initState(): Promise<State> {
   const rl = createInterface({
     input: process.stdin,
     output: process.stdout,
