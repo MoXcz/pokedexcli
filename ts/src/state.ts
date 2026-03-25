@@ -1,6 +1,8 @@
 import { createInterface, type Interface } from "node:readline";
 import { commandExit } from "./command_exit.js";
 import { commandHelp } from "./command_help.js";
+import { PokeAPI } from "./pokeapi.js";
+import { commandMap, commandMapb } from "./command_map.js";
 
 export type CLICommand = {
   name: string;
@@ -11,6 +13,9 @@ export type CLICommand = {
 export type State = {
   rl: Interface;
   commands: Record<string, CLICommand>;
+  pokeApi: PokeAPI;
+  nextLocationsURL: string | undefined;
+  prevLocationsURL: string | undefined;
 };
 
 export async function initState(): Promise<State> {
@@ -31,10 +36,25 @@ export async function initState(): Promise<State> {
       description: "Displays a help message",
       callback: commandHelp,
     },
+    map: {
+      name: "map",
+      description: "Call map locations",
+      callback: commandMap,
+    },
+    mapb: {
+      name: "mapb",
+      description: "Call previous map locations",
+      callback: commandMapb,
+    },
   };
+  const pokeApi = new PokeAPI();
+
   const state: State = {
     rl: rl,
     commands: commands,
+    pokeApi: pokeApi,
+    nextLocationsURL: undefined,
+    prevLocationsURL: undefined,
   };
 
   return state;
