@@ -18,7 +18,7 @@ export type State = {
   prevLocationsURL: string | undefined;
 };
 
-export async function initState(): Promise<State> {
+export function initState(): State {
   const rl = createInterface({
     input: process.stdin,
     output: process.stdout,
