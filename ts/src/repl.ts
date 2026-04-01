@@ -9,10 +9,11 @@ export async function startREPL(state: State) {
     }
     const cleanedInput = cleanInput(input);
     const command = cleanedInput[0];
+    const args = cleanedInput.slice(1);
 
     if (command in state.commands) {
       try {
-        await state.commands[command].callback(state);
+        await state.commands[command].callback(state, ...args);
       } catch (err) {
         console.error(err);
       }
