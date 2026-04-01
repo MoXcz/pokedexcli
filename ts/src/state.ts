@@ -48,7 +48,7 @@ export function initState(): State {
       callback: commandMapb,
     },
     explore: {
-      name: "explore",
+      name: "explore <location_name>",
       description: "Explore pokemon in a location",
       callback: commandExplore,
     },
