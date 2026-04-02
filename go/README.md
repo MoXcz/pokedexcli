@@ -1,6 +1,6 @@
 # Pokedexcli
 
-This is `pokedexcli`, a [REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop) (Read-Eval-Print Loop) interface for the [PokéAPI](https://pokeapi.co/) that integrates caching for ease of use.
+The Go implementation of the Pokedex API as a CLI.
 
 ## Motivation
 
@@ -24,6 +24,7 @@ Pokedex > help
 ## Usage
 
 Available commands:
+
 - `help`. Display a help message with the usage of the commands.
 - `exit`. Close `pokedexcli` gracefully.
 - `map`. Display 20 Pokémon location areas (the order is as returned by PokéAPI).
@@ -35,6 +36,7 @@ Available commands:
 - `history`. Print previously used commands
 
 ## Examples
+
 ```sh
 pokedexcli
 Pokedex > catch pidgey
