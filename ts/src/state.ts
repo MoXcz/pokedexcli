@@ -60,6 +60,11 @@ export function initState(): State {
       description: "Try to catch a pokemon",
       callback: commandCatch,
     },
+    inspect: {
+      name: "inspect <pokemon>",
+      description: "Inspect a caught pokemon",
+      callback: commandInspect,
+    },
   };
   const pokeApi = new PokeAPI();
   const pokedex: Record<string, Pokemon> = {};
